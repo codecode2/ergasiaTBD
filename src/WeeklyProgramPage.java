@@ -41,7 +41,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
         weekTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setFocusCycleRoot(true);
 

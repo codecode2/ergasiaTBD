@@ -2,8 +2,13 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
-
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.DefaultListModel;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 /**
  *
  * @author Chameleon
@@ -11,6 +16,19 @@ import java.awt.Window;
 public class EditPage extends javax.swing.JFrame {
 
 
+     static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+     static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+    static Statement statement2 =null;
+    static Statement statement3 =null;
+    static PreparedStatement  insertonList =null;
+    static ResultSet rs   = null;
+    static ResultSet rs2   = null;
+    
    
     public EditPage() {
         
@@ -18,8 +36,37 @@ public class EditPage extends javax.swing.JFrame {
         initComponents();
         
          centreWindow(this);
+         myconnection();
     }
 
+     void myconnection()
+      {
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                    
+                     dbConnection= DriverManager.getConnection(url,username,passwd);  
+                     statement = dbConnection.createStatement();
+                      
+                      statement.close();
+                      dbConnection.close();
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }
+         
+         
+         
+         
+         
+         
+   }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,10 +78,14 @@ public class EditPage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         BackToMenu = new javax.swing.JButton();
+        tableOptions = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listofOptions = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        edit = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setFocusCycleRoot(true);
 
@@ -45,12 +96,30 @@ public class EditPage extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+        tableOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  "" ,"Customer", "Company", "Movie","Scheduled","Billings"}));
+        tableOptions.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                tableOptionsItemStateChanged(evt);
+            }
+        });
+
+        listofOptions.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {  };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(listofOptions);
+
+        jLabel1.setText("Choose an option");
+
+        edit.setText("Edit");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+
+        delete.setText("Delete");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -58,19 +127,46 @@ public class EditPage extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
+                .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(51, 51, 51)
+                            .addComponent(tableOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(87, 87, 87)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(458, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(96, 96, 96))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(151, 151, 151))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(98, 98, 98)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(311, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tableOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(85, 85, 85))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,6 +195,163 @@ public class EditPage extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_BackToMenuActionPerformed
 
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+            String tableSelection1 = String.valueOf(tableOptions.getSelectedItem());
+            String tableSelection2 = String.valueOf(listofOptions.getSelectedValue());
+            
+            String s=tableSelection2;
+            
+           
+            System.out.println(  s+"  "+ tableSelection2);
+            if(tableSelection1.equals("") || s==null )
+            { 
+                
+                makeChangesNoChoises nodata = new makeChangesNoChoises();
+                nodata.show();
+                this.hide();
+              
+            }
+            else if(tableSelection1.equals("Customer")  )
+            {
+                
+                 makeChangesCustomer makechange =  new makeChangesCustomer ();
+                 makechange.show();
+                 this.hide();
+            }else if(tableSelection1.equals("Company")  )
+            {
+                makeChangeCompany makechange2 = new makeChangeCompany();
+                makechange2.show();
+                this.hide();
+            
+            } else if(tableSelection1.equals("Movie")  )
+            {
+                makeChangesMovie makechange3 = new makeChangesMovie();
+                makechange3.show();
+                this.hide();
+            
+            } else if(tableSelection1.equals("Scheduled")   )
+            {
+                 makeChangesScheduled makechange4 = new makeChangesScheduled();
+                makechange4.show();
+                this.hide();
+            
+            } 
+            else if(tableSelection1.equals("Billings") && tableSelection2!=null )
+            {
+                makeChangesBillings makechange5 = new makeChangesBillings();
+                makechange5.show();
+                this.hide();
+            
+            } 
+        
+        
+        
+       
+    }//GEN-LAST:event_editActionPerformed
+
+    private void tableOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tableOptionsItemStateChanged
+     
+        DefaultListModel mylist =new DefaultListModel();
+            String tableSelection = String.valueOf(tableOptions.getSelectedItem());
+         
+         try{
+                    if (tableSelection.equals(""))
+                                   
+                       {
+                          tableSelection="empty";
+                          mylist.clear();
+                           
+                           
+                        }
+             
+                     dbConnection= DriverManager.getConnection(url,username,passwd);  
+                     statement = dbConnection.createStatement();
+                   
+                     String selectString ="select * from "+tableSelection;
+                     
+                     
+                     rs=statement.executeQuery(selectString);
+                        
+                       
+                       
+                      
+                      if (tableSelection.equals("Company"))
+                       {
+                        while(rs.next())
+                           {
+                           int getid = rs.getInt("id2");
+                           String coname = rs.getString("CONAME");
+                           String mail = rs.getString("COMAIL");
+                           String phone = rs.getString("COPHONE");
+                           String location = rs.getString("LOCATION");
+                            mylist.addElement(getid+" "+coname+" "+mail+" "+phone+" "+location);                                          
+                           }
+                       } 
+                        else if (tableSelection.equals("Billings"))
+                       {
+                        while(rs.next())
+                           {
+                           String time1 = rs.getString("TM");
+                           int price = rs.getInt("PRICE");
+
+                            mylist.addElement(time1+" "+price);                                          
+                           }
+                       }else if (tableSelection.equals("Customer"))
+                       {
+                        while(rs.next())
+                           {
+                           int getid = rs.getInt("id1");
+                           String firstname = rs.getString("firstname");
+                           String lastname = rs.getString("lastname");
+                           String email = rs.getString("email");
+                           String phone = rs.getString("phone");
+                           String company = rs.getString("Company");
+                            mylist.addElement(getid+" "+firstname+" "+lastname+" "+phone+" "+company);                                          
+                           }
+                       }
+                       else if (tableSelection.equals("Movie"))
+                       {
+                        while(rs.next())
+                           {
+                           int getid = rs.getInt("id3");
+                           String moviename = rs.getString("moviename");
+                           String kindmovie = rs.getString("kindmovie");
+                           String producer = rs.getString("producer");
+                           String duration = rs.getString("duration");
+                           
+                            mylist.addElement(getid+" "+moviename+" "+kindmovie+" "+producer+" "+duration);                                          
+                           }
+                       }else if (tableSelection.equals("Scheduled"))
+                       {
+                        while(rs.next())
+                           {
+                           int getid = rs.getInt("sid2");
+                           String day2 = rs.getString("day2");
+                           String timezone2 = rs.getString("timezone2");
+                           String movie2 = rs.getString("movie2");
+                            
+                           
+                            mylist.addElement(getid+" "+day2+" "+timezone2+" "+movie2);                                          
+                           }
+                       }
+                     
+                      listofOptions.setModel(mylist);
+                      
+                      statement.close();
+                      dbConnection.close();
+                 
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }
+         
+    
+         
+                     
+                                        
+    }//GEN-LAST:event_tableOptionsItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -121,9 +374,13 @@ public class EditPage extends javax.swing.JFrame {
         } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenu;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JButton delete;
+    private javax.swing.JButton edit;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listofOptions;
+    private javax.swing.JComboBox<String> tableOptions;
     // End of variables declaration//GEN-END:variables
 
      

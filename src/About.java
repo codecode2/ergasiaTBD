@@ -37,11 +37,11 @@ public class About extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         BackToMenu = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setFocusCycleRoot(true);
 
-        BackToMenu.setText("jButton1");
+        BackToMenu.setText("Main menu");
         BackToMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuActionPerformed(evt);

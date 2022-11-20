@@ -1,7 +1,18 @@
 
+ 
+ 
+ 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.DefaultListModel;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,17 +25,125 @@ import java.awt.Window;
  */
 public class InsertionTimelinePage extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+     static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+     static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+    static Statement statement2 =null;
+    static PreparedStatement  insertList =null;
+    static ResultSet rs   = null;
+    static ResultSet rs2 = null;
+     String changer[]=new String [30];
+    
+    
+     
     public InsertionTimelinePage() {
         
         
         initComponents();
-        
          centreWindow(this);
+         myconnection();
+         mylist();
+         
     }
-
+    
+  
+    
+    
+    
+    
+    
+    void myconnection()
+      {
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                    
+                     dbConnection= DriverManager.getConnection(url,username,passwd);  
+                     statement = dbConnection.createStatement();
+                     String selectString ="select moviename from movie";
+                     rs=statement.executeQuery(selectString);
+                       DefaultListModel mylist =new DefaultListModel();
+                     while(rs.next())
+                     {
+                     String moviename = rs.getString("moviename"); 
+                      mylist.addElement(moviename);                                          
+                     }
+                     
+                      jList1.setModel(mylist);
+                      
+                      statement.close();
+                      dbConnection.close();
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         
+         }
+         
+         
+         
+         
+         
+         
+   }
+    
+    
+     
+    
+      void mylist()
+     {
+     
+         int i =0;
+         String SelectionString = "SELECT TM FROM BILLINGS";
+         try 
+         {
+             dbConnection2= DriverManager.getConnection(url,username,passwd);  
+             statement2 = dbConnection2.createStatement();
+             rs2= statement2.executeQuery(SelectionString);
+             while(rs2.next())
+             {
+                  changer[i]=rs2.getString("TM");
+                  i++;
+             }
+             
+             statement2.close();
+             dbConnection2.close();
+         } 
+            
+         catch(SQLException ex)
+          {
+              while(ex !=null)
+              {
+                  System.out.println("Message: "+ex.getMessage());
+                  ex=ex.getNextException();
+              }   
+          }
+         
+         ComboDay.addItem("Monday");
+         ComboDay.addItem("Tuesday");
+         ComboDay.addItem("Wednesday");
+         ComboDay.addItem("Thursday");
+         ComboDay.addItem("Friday");
+         ComboDay.addItem("Saturday");
+         ComboDay.addItem("Sunday");
+         
+         for(int y=0;y<i;y++)
+            {
+             ComboTime.addItem(changer[y]);
+            }
+          
+       
+          
+        }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,8 +157,18 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
         BackToMenu = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        ComboDay = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        ComboTime = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setFocusCycleRoot(true);
 
@@ -51,11 +180,36 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
         });
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", " " };
+            String[] strings = {  };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(jList1);
+
+        ComboDay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
+
+        jLabel1.setText("Check Price");
+
+        ComboTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
+
+        jButton1.setText("Check");
+
+        jButton2.setText("Price");
+
+        jLabel2.setText("Check if is it available");
+
+        jButton3.setText("Submit");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Choose a movie");
+
+        jLabel4.setText("Day ");
+
+        jLabel5.setText("Time");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -64,18 +218,69 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(483, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 53, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(ComboDay, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(ComboTime, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(142, 142, 142)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(270, 270, 270)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(406, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ComboDay, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ComboTime, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -103,6 +308,10 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
                 StartPage.setVisible(true);
                 
     }//GEN-LAST:event_BackToMenuActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,6 +356,16 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
         } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenu;
+    private javax.swing.JComboBox<String> ComboDay;
+    private javax.swing.JComboBox<String> ComboTime;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
