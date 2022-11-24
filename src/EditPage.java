@@ -1,4 +1,5 @@
 
+import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -9,6 +10,8 @@ import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.*;
 /**
  *
  * @author Chameleon
@@ -28,7 +31,10 @@ public class EditPage extends javax.swing.JFrame {
     static PreparedStatement  insertonList =null;
     static ResultSet rs   = null;
     static ResultSet rs2   = null;
-    
+    static String classname1;
+    static PreparedStatement insertValues = null;
+    public static String SetValueForText1="to eftiaksa";
+    public static String SetValueForText2="to ekana re morti";
    
     public EditPage() {
         
@@ -46,8 +52,8 @@ public class EditPage extends javax.swing.JFrame {
                 
          } catch(ClassNotFoundException ex) {}
          
-         try{
-                    
+         try{   
+                         
                      dbConnection= DriverManager.getConnection(url,username,passwd);  
                      statement = dbConnection.createStatement();
                       
@@ -120,6 +126,11 @@ public class EditPage extends javax.swing.JFrame {
         });
 
         delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -139,14 +150,14 @@ public class EditPage extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(87, 87, 87)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(96, 96, 96))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(151, 151, 151))))
+                        .addGap(151, 151, 151))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,15 +206,27 @@ public class EditPage extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_BackToMenuActionPerformed
 
+
+    
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-            String tableSelection1 = String.valueOf(tableOptions.getSelectedItem());
-            String tableSelection2 = String.valueOf(listofOptions.getSelectedValue());
-            
-            String s=tableSelection2;
-            
            
-            System.out.println(  s+"  "+ tableSelection2);
-            if(tableSelection1.equals("") || s==null )
+                 
+        String tableSelection1 = String.valueOf(tableOptions.getSelectedItem());
+        String tableSelection2 = String.valueOf( listofOptions.getSelectedValue());
+            
+           boolean s=false;
+             
+             if (tableSelection2.equals("null"))
+             {
+                 s=true;
+             
+             }
+            
+          
+           
+            
+            
+            if(tableSelection1.equals("") || (s) )
             { 
                 
                 makeChangesNoChoises nodata = new makeChangesNoChoises();
@@ -213,7 +236,7 @@ public class EditPage extends javax.swing.JFrame {
             }
             else if(tableSelection1.equals("Customer")  )
             {
-                
+                   
                  makeChangesCustomer makechange =  new makeChangesCustomer ();
                  makechange.show();
                  this.hide();
@@ -236,11 +259,13 @@ public class EditPage extends javax.swing.JFrame {
                 this.hide();
             
             } 
-            else if(tableSelection1.equals("Billings") && tableSelection2!=null )
+            else if(tableSelection1.equals("Billings")  )
             {
+                 
                 makeChangesBillings makechange5 = new makeChangesBillings();
                 makechange5.show();
                 this.hide();
+               
             
             } 
         
@@ -251,8 +276,9 @@ public class EditPage extends javax.swing.JFrame {
 
     private void tableOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_tableOptionsItemStateChanged
      
-        DefaultListModel mylist =new DefaultListModel();
+           DefaultListModel mylist =new DefaultListModel();
             String tableSelection = String.valueOf(tableOptions.getSelectedItem());
+             delete.setVisible(true);
          
          try{
                     if (tableSelection.equals(""))
@@ -284,7 +310,8 @@ public class EditPage extends javax.swing.JFrame {
                            String mail = rs.getString("COMAIL");
                            String phone = rs.getString("COPHONE");
                            String location = rs.getString("LOCATION");
-                            mylist.addElement(getid+" "+coname+" "+mail+" "+phone+" "+location);                                          
+                            mylist.addElement(getid+" "+coname+" "+mail+" "+phone+" "+location); 
+                           
                            }
                        } 
                         else if (tableSelection.equals("Billings"))
@@ -293,9 +320,12 @@ public class EditPage extends javax.swing.JFrame {
                            {
                            String time1 = rs.getString("TM");
                            int price = rs.getInt("PRICE");
+                           
 
-                            mylist.addElement(time1+" "+price);                                          
+                            mylist.addElement(time1+" "+price); 
+                              delete.setVisible(false);
                            }
+                        
                        }else if (tableSelection.equals("Customer"))
                        {
                         while(rs.next())
@@ -308,6 +338,7 @@ public class EditPage extends javax.swing.JFrame {
                            String company = rs.getString("Company");
                             mylist.addElement(getid+" "+firstname+" "+lastname+" "+phone+" "+company);                                          
                            }
+                        
                        }
                        else if (tableSelection.equals("Movie"))
                        {
@@ -321,6 +352,7 @@ public class EditPage extends javax.swing.JFrame {
                            
                             mylist.addElement(getid+" "+moviename+" "+kindmovie+" "+producer+" "+duration);                                          
                            }
+                         
                        }else if (tableSelection.equals("Scheduled"))
                        {
                         while(rs.next())
@@ -333,8 +365,10 @@ public class EditPage extends javax.swing.JFrame {
                            
                             mylist.addElement(getid+" "+day2+" "+timezone2+" "+movie2);                                          
                            }
+                         
                        }
                      
+                      
                       listofOptions.setModel(mylist);
                       
                       statement.close();
@@ -351,6 +385,61 @@ public class EditPage extends javax.swing.JFrame {
                      
                                         
     }//GEN-LAST:event_tableOptionsItemStateChanged
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        String tableSelection1 = String.valueOf(tableOptions.getSelectedItem());  
+        String tableSelection2 = String.valueOf( listofOptions.getSelectedValue());
+          if (tableSelection2.equals("null"))
+          {
+              
+             
+             JOptionPane.showMessageDialog(jPanel1, "There are no choises.Please make an option");
+             
+              
+          } else 
+          {  int a = JOptionPane.showConfirmDialog(jPanel1,"Do you want to continue?" );
+                    
+                if(a==JOptionPane.YES_OPTION)
+                {
+                     String parts[] = tableSelection2.split(" ");
+                     
+           try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call DELETION(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                      
+                       
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }
+         
+                   JOptionPane.showMessageDialog(jPanel1, "Deletion was done");
+                     tableOptions.setSelectedItem("");
+                }    
+            
+          }
+        
+        
+        
+        
+    }//GEN-LAST:event_deleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -383,6 +472,7 @@ public class EditPage extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> tableOptions;
     // End of variables declaration//GEN-END:variables
 
+   
      
 
 }

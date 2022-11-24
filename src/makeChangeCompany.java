@@ -14,9 +14,7 @@ import java.awt.Window;
  */
 public class makeChangeCompany extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+     
     public makeChangeCompany() {
         
         
@@ -25,6 +23,14 @@ public class makeChangeCompany extends javax.swing.JFrame {
          centreWindow(this);
     }
 
+    void mylist()
+    {
+        
+       
+    
+    
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

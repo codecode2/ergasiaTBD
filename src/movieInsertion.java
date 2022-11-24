@@ -31,12 +31,17 @@ public class movieInsertion extends javax.swing.JFrame {
     static Statement statement =null; 
     static PreparedStatement insertMovie = null;
     static PreparedStatement insertCombo = null;
+    
     static ResultSet rs   = null;
     public final int javaid3 = 0; 
     public int changeid3 ;
     String myCompany[]=new String[30];
     String myCustomers[]=new String[30];
+    String firstnameout[]=new String [30];
+    String namesout[]=new String [30];
+    String phonesout[]=new String [30];
     
+     
      
     public movieInsertion() {
         
@@ -193,27 +198,22 @@ public class movieInsertion extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(121, 121, 121)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(duration, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(movieProducer, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(movieKind, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(movieName, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(combocompany, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(176, Short.MAX_VALUE))
+                            .addComponent(comboCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combocompany, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(duration, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                                .addComponent(movieProducer, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(movieKind, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(movieName, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,17 +330,67 @@ public class movieInsertion extends javax.swing.JFrame {
     }//GEN-LAST:event_submitActionPerformed
 
     private void combocompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocompanyActionPerformed
-         
-              
+        
+        
         
         
     }//GEN-LAST:event_combocompanyActionPerformed
 
     private void combocompanyItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_combocompanyItemStateChanged
+               int i=0;
+        String found = String.valueOf( combocompany.getSelectedItem());
+            
+           comboCustomer.removeAllItems();
+                   
+             if(found.equals("null"))
+             {
+                 firstnameout[0]="";
+                 namesout[0]="";
+                 phonesout[0]="";
+             }
+             else{  
+          
+               
+              try{
+                 
+                    statement = dbConnection.createStatement();
+                   String selectString ="select firstname,lastname,phone from customer where company='" +found+"'";
+                     
+                     rs=statement.executeQuery(selectString);
 
-         
-  
+                     while(rs.next()){
+                         
+                        firstnameout[i]= rs.getString("FIRSTNAME");                         
+                        namesout[i]= rs.getString("LASTNAME");
+                        phonesout[i]= rs.getString("PHONE");                        
+                          i++; 
+                      
+                      } 
+                    
+                      
+                    
+                } catch(SQLException ex)
+                 {
+                    System.out.println("");
+                    while(ex != null)
+                    {
+                    System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
+                    ex=ex.getNextException();
+
+                    }
+                   
+                  }  
+              
+             }  
+            
+               for(int y=0;y<i;y++)
+            {
+               
+             comboCustomer.addItem(firstnameout[y]+"  "+namesout[y]+"  "+phonesout[y]); 
+          
+            }
         
+         
     }//GEN-LAST:event_combocompanyItemStateChanged
 
     /**

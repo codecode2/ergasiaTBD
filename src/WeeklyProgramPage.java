@@ -6,7 +6,7 @@ import java.awt.Window;
  
  
 public class WeeklyProgramPage extends javax.swing.JFrame {
-
+ 
     public void setValue(String value,int x,int y)
     {
        
