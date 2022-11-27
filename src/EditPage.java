@@ -10,6 +10,8 @@ import java.sql.Statement;
 import javax.swing.DefaultListModel;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.*;
 /**
@@ -232,28 +234,152 @@ public class EditPage extends javax.swing.JFrame {
                 makeChangesNoChoises nodata = new makeChangesNoChoises();
                 nodata.show();
                 this.hide();
+                
               
             }
             else if(tableSelection1.equals("Customer")  )
             {
-                   
+                 String parts[] = tableSelection2.split(" ");
+         try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call InsertionRestoring(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                
+              
+           
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }  
+        
+         
+          
                  makeChangesCustomer makechange =  new makeChangesCustomer ();
                  makechange.show();
                  this.hide();
             }else if(tableSelection1.equals("Company")  )
             {
+                String parts[] = tableSelection2.split(" ");
+         try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call InsertionRestoring(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                
+              
+           
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }  
+        
+         
+        
                 makeChangeCompany makechange2 = new makeChangeCompany();
                 makechange2.show();
                 this.hide();
             
             } else if(tableSelection1.equals("Movie")  )
             {
+                String parts[] = tableSelection2.split(" ");
+         try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call InsertionRestoring(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                
+              
+           
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }  
+        
+         
+        
                 makeChangesMovie makechange3 = new makeChangesMovie();
                 makechange3.show();
                 this.hide();
             
             } else if(tableSelection1.equals("Scheduled")   )
             {
+                String parts[] = tableSelection2.split(" ");
+         try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call InsertionRestoring(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                
+              
+           
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }  
+        
+         
+        
                  makeChangesScheduled makechange4 = new makeChangesScheduled();
                 makechange4.show();
                 this.hide();
@@ -261,16 +387,44 @@ public class EditPage extends javax.swing.JFrame {
             } 
             else if(tableSelection1.equals("Billings")  )
             {
-                 
+               String parts[] = tableSelection2.split(" ");
+         try{
+              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             statement = dbConnection.createStatement();
+             
+              int x=Integer.parseInt(parts[0]);
+              
+             String SelectString="{  call InsertionRestoring(?,?)}";
+              
+             
+             
+               insertValues= dbConnection.prepareStatement(SelectString);
+              
+                
+                
+               insertValues.setInt(1,x);
+              
+               insertValues.setString(2, tableSelection1);
+             
+               insertValues.executeUpdate();
+                
+              
+           
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }  
+        
+         
+          
                 makeChangesBillings makechange5 = new makeChangesBillings();
                 makechange5.show();
                 this.hide();
                
             
             } 
-        
-        
-        
+              
        
     }//GEN-LAST:event_editActionPerformed
 

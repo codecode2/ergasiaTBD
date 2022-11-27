@@ -1,8 +1,18 @@
 
+ 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
-
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Types;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,17 +24,82 @@ import java.awt.Window;
  */
 public class makeChangesMovie extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+      static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+     String  movieName;
+     String  kindMovie ;   
+     String  producer;
+    String  duration;  
+    
+       int newid1;
+    int counter = 0; 
+    
+     String movieName2 ;
+    String  kindMovie2 ;
+    String producer2;
+    String  duration2;
+    
     public makeChangesMovie() {
         
         
         initComponents();
         
          centreWindow(this);
+         mylist2();
     }
 
+     void mylist2()
+    {
+         
+        try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+
+            CallableStatement  takeValues= dbConnection2.prepareCall("{call TakeValuesMovie(?,?,?,?,?)}");    
+           
+              takeValues.registerOutParameter(1, Types.INTEGER);
+              takeValues.registerOutParameter(2, Types.VARCHAR);
+              takeValues.registerOutParameter(3, Types.VARCHAR);
+              takeValues.registerOutParameter(4, Types.VARCHAR);
+              takeValues.registerOutParameter(5, Types.VARCHAR);
+              
+              takeValues.executeUpdate();
+                   
+           
+             newid1 = takeValues.getInt(1);
+             
+             movieName = takeValues.getString(2);
+             kindMovie  = takeValues.getString(3);  
+             producer   = takeValues.getString(4);
+              duration   = takeValues.getString(5);
+
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }         
+        
+            jTextField1.setText(movieName);
+            jTextField2.setText(kindMovie);
+            jTextField3.setText(producer);
+            jTextField4.setText(duration);
+             
+
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,11 +245,44 @@ public class makeChangesMovie extends javax.swing.JFrame {
                 this.hide();
                 MainMenu StartPage = new MainMenu();
                 StartPage.setVisible(true);
-                
+               
     }//GEN-LAST:event_BackToMenuActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+           movieName2=jTextField1.getText();
+           kindMovie2 = jTextField2.getText();
+           producer2= jTextField3.getText();
+           duration2= jTextField4.getText();
+          
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement editValues= dbConnection2.prepareCall("{call editValues(?,?,?,?,?,?,?)}");    
+           
+              editValues.setInt(1, newid1);
+              editValues.setString(2,"Movie");
+              editValues.setString(3, movieName2);
+              editValues.setString(4, kindMovie2);
+              editValues.setString(5, producer2);
+              editValues.setString(6, duration2);
+              editValues.setString(7, "");
+                   
+            
+              editValues.executeUpdate();
+  
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }   
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

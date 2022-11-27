@@ -2,7 +2,17 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
-
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Types;
+ 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,6 +24,27 @@ import java.awt.Window;
  */
 public class makeChangeCompany extends javax.swing.JFrame {
 
+   static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+     String  newName;
+     String  newLastname ;   
+     String  newMail;
+    String  newPhone;  
+    String  newLocation; 
+     int newid1;
+    int counter = 0;  
+    
+    String  newName2 ;
+    String  newMail2 ;
+    String newPhone2;
+    String  newLocation2;
+    
+        
      
     public makeChangeCompany() {
         
@@ -21,15 +52,53 @@ public class makeChangeCompany extends javax.swing.JFrame {
         initComponents();
         
          centreWindow(this);
+            mylist2();
     }
 
-    void mylist()
+      void mylist2()
     {
+         
+        try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+
+            CallableStatement  takeValues= dbConnection2.prepareCall("{call TakeValuesCompany(?,?,?,?,?)}");    
+           
+              takeValues.registerOutParameter(1, Types.INTEGER);
+              takeValues.registerOutParameter(2, Types.VARCHAR);
+              takeValues.registerOutParameter(3, Types.VARCHAR);
+              takeValues.registerOutParameter(4, Types.VARCHAR);
+              takeValues.registerOutParameter(5, Types.VARCHAR);
+              
+              takeValues.executeUpdate();
+                   
+           
+             newid1 = takeValues.getInt(1);
+             newName = takeValues.getString(2);
+             newMail  = takeValues.getString(3);  
+             newPhone   = takeValues.getString(4);
+             newLocation   = takeValues.getString(5);
+
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }         
         
-       
-    
-    
+            jTextField1.setText(newName);
+            jTextField2.setText(newMail);
+            jTextField3.setText(newPhone);
+            jTextField4.setText(newLocation);
+             
+
     }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -180,7 +249,41 @@ public class makeChangeCompany extends javax.swing.JFrame {
     }//GEN-LAST:event_BackToMenuActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+ 
+           newName2=jTextField1.getText();
+           newMail2 = jTextField2.getText();
+           newPhone2= jTextField3.getText();
+           newLocation2= jTextField4.getText();
+          
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement editValues= dbConnection2.prepareCall("{call editValues(?,?,?,?,?,?,?)}");    
+           
+              editValues.setInt(1, newid1);
+              editValues.setString(2,"Company");
+              editValues.setString(3, newName2);
+              editValues.setString(4, newMail2);
+              editValues.setString(5, newPhone2);
+              editValues.setString(6, newLocation2);
+              editValues.setString(7, "");
+                   
+            
+              editValues.executeUpdate();
+  
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }   
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -8,6 +8,12 @@ import java.sql.Statement;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Types;
+import javax.swing.JOptionPane;
+import javax.swing.*;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -31,8 +37,8 @@ public class NewCustomerMenu extends javax.swing.JFrame {
     public final int javaid1 = 10000;
     public final int javaid2 = 100;
     public int changeid ;
-     public int changeid2 ;
-     
+    public int changeid2 ;
+    static Connection dbConnection2 = null;
      
     public NewCustomerMenu() {
         
@@ -309,7 +315,7 @@ public class NewCustomerMenu extends javax.swing.JFrame {
         String locationcompany= locationCompany.getText();
         boolean appearing=false;
         
-       if (fname.equals(s) || lname.equals(s) || mail.equals(s)|| phoneN.equals(s) || Company.equals(s) || mailcompany.equals(s) || phonecompany.equals(s)|| locationcompany.equals(s))
+       if (fname.equals(s) || lname.equals(s) || mail.equals(s)|| phoneN.equals(s) || Company.equals(s)  )
       
        {
        
@@ -331,7 +337,7 @@ public class NewCustomerMenu extends javax.swing.JFrame {
                      while(rs.next())
                      {
                      int counter = rs.getInt("count(id1)");
-                      System.out.println(counter);
+                   
 
                        changeid= javaid1+counter;
                      }
@@ -345,44 +351,82 @@ public class NewCustomerMenu extends javax.swing.JFrame {
                      insertCustomer.setString(5,phoneN);
                      insertCustomer.setString(6,Company);
                      insertCustomer.executeUpdate();  
+                 
                      
+                   
                      
+               CallableStatement  checkIfExists= dbConnection.prepareCall("{call  checkIfExists(?,?)}"); 
+               
+               String exist ;
+               checkIfExists.setString(1,Company);
+                    checkIfExists.registerOutParameter(2, Types.VARCHAR);
+                
+                 checkIfExists.executeUpdate();
+                 
+                  exist = checkIfExists.getString(2);
+                  
+                  
+                 if (Company.equals(exist))
+                 {
                      
-                    String selectString2 ="select count(id2) from company";
+                      JOptionPane.showMessageDialog(jPanel1, "Company name exists in board");
+                 
+                 }
+                 
+                 else{ 
+                     
+                     String selectString2 ="select count(id2) from company";
                      rs=statement.executeQuery(selectString2);
 
                      while(rs.next())
                      {
                      int counter = rs.getInt("count(id2)");
-                      System.out.println(counter);
-
                        changeid2= javaid2+counter;
                      }
                      
                      insertCompany.setInt(1,changeid2++);
                      insertCompany.setString(2, Company);
-                     insertCompany.setString(3,mailcompany);
-                     insertCompany.setString(4,phonecompany);
+                     
+                     if (mailcompany.equals(""))
+                     {
+                         mailcompany="-";  
+                         
+                     }
+ 
+                    if (  phonecompany.equals("")){
+                         phonecompany="-";   
+                     }  
+                    
+                    if (  locationcompany.equals(""))
+                    {
+                        locationcompany="-"; 
+                    } 
+                        
+                      insertCompany.setString(3,mailcompany);
+                      insertCompany.setString(4,phonecompany);
                      insertCompany.setString(5,locationcompany);
+                     
                      insertCompany.executeUpdate();
+                     
+                     
                      
                       statement.close();
                      dbConnection.close();
-
+                 }
             } catch(SQLException ex)
              {
                  System.out.println("");
                  while(ex != null){
                  System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
                  ex=ex.getNextException();
-                 appearing = true;
+                appearing =false;
                 }
                    
              }
             
             
           
-        if (appearing==false){ 
+         if (appearing==false){ 
             Pop1 popup = new Pop1();
             popup.show();
             this.hide();  
@@ -392,7 +436,8 @@ public class NewCustomerMenu extends javax.swing.JFrame {
             popup3.show();
             this.hide();
              }
-        
+      
+ 
        }
     
         

@@ -2,6 +2,17 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+ 
+import java.sql.Types;
+ 
+
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,17 +25,89 @@ import java.awt.Window;
  */
 public class makeChangesCustomer extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+    static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+     String  newFirstname;
+     String  newLastname ;   
+     String  newEmail;
+    String  newPhone;  
+    String  newCompany; 
+     int newid1;
+    int counter = 0;
+    
+    String  newFirstname2 ;
+    String  newLastname2 ;
+    String  newEmail2;
+    String  newPhone2;
+    String  newCompany2;
+        
+    
     public makeChangesCustomer() {
         
         
         initComponents();
         
          centreWindow(this);
+        // mylist();
+         mylist2();
     }
+   
+    
+    
+    
+    
+    
+    void mylist2()
+    {
+         
+        try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement  takeValues= dbConnection2.prepareCall("{call TakeValuesCustomer(?,?,?,?,?,?)}");    
+           
+              takeValues.registerOutParameter(1, Types.INTEGER);
+              takeValues.registerOutParameter(2, Types.VARCHAR);
+              takeValues.registerOutParameter(3, Types.VARCHAR);
+              takeValues.registerOutParameter(4, Types.VARCHAR);
+              takeValues.registerOutParameter(5, Types.VARCHAR);
+              takeValues.registerOutParameter(6, Types.VARCHAR);
+              takeValues.executeUpdate();
+                   
+           
+             newid1 = takeValues.getInt(1);
+             newFirstname = takeValues.getString(2);
+             newLastname  = takeValues.getString(3);  
+             newEmail   = takeValues.getString(4);
+             newPhone   = takeValues.getString(5);
+             newCompany  = takeValues.getString(6);
 
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }         
+        
+            jTextField1.setText(newFirstname);
+            jTextField2.setText(newLastname);
+            jTextField3.setText(newEmail);
+            jTextField4.setText(newPhone);
+            jTextField5.setText(newCompany);
+
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,7 +120,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         BackToMenu = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        saveChanges = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
@@ -67,10 +150,10 @@ public class makeChangesCustomer extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Save Changes");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        saveChanges.setText("Save Changes");
+        saveChanges.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                saveChangesActionPerformed(evt);
             }
         });
 
@@ -100,7 +183,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(102, 102, 102))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -155,7 +238,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41))
         );
 
@@ -185,9 +268,57 @@ public class makeChangesCustomer extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_BackToMenuActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void saveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesActionPerformed
+           
+        
+        
+        
+        
+           newFirstname2=jTextField1.getText();
+           newLastname2 = jTextField2.getText();
+           newEmail2= jTextField3.getText();
+           newPhone2= jTextField4.getText();
+           newCompany2= jTextField5.getText();
+        
+        
+        System.out.println(newFirstname2);
+        
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement editValues= dbConnection2.prepareCall("{call editValues(?,?,?,?,?,?,?)}");    
+           
+              editValues.setInt(1, newid1);
+              editValues.setString(2,"Customer");
+               editValues.setString(3, newFirstname2);
+                editValues.setString(4, newLastname2);
+                 editValues.setString(5, newEmail2);
+                  editValues.setString(6, newPhone2);
+                   editValues.setString(7, newCompany2);
+                   
+            
+              editValues.executeUpdate();
+                   
+           
+             
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }   
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_saveChangesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         EditPage edit = new EditPage();
@@ -243,7 +374,6 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenu;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -255,5 +385,6 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton saveChanges;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,10 +3,32 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.Types;
+ 
  
  
 public class WeeklyProgramPage extends javax.swing.JFrame {
- 
+  
+    
+    static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+    static ResultSet rs   = null;
+    static PreparedStatement insertValues = null;
+    int dayCell;
+    int timezoneNumber;
+    
+    
     public void setValue(String value,int x,int y)
     {
        
@@ -22,10 +44,101 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
          
         initComponents();
         centreWindow(this);
- 
+        tablelist();
         
     }
 
+    void tablelist()
+    {
+        
+              
+                try{
+                   
+             
+                     dbConnection= DriverManager.getConnection(url,username,passwd);  
+                     statement = dbConnection.createStatement();
+                   
+                     String selectString ="select * from scheduled";
+                     
+                     
+                     rs=statement.executeQuery(selectString);
+                        
+                       
+                       
+                      
+                      
+                       
+                        while(rs.next())
+                           {
+                           String day2 = rs.getString("DAY2");
+                           String timezone2 = rs.getString("TIMEZONE2");
+                           String movie2 = rs.getString("MOVIE2");
+                                switch (day2)
+                                {
+                                    case "Monday": dayCell =1;
+                                        
+                                    break;
+                                    case "Tuesday": dayCell =2;
+                                        
+                                    break;
+                                    case "Wednesday": dayCell =3;
+                                        
+                                    break;
+                                    case "Thursday": dayCell =4;
+                                        
+                                    break;
+                                    case "Friday": dayCell =5;
+                                        
+                                    break;
+                                    case "Saturday": dayCell =6;
+  
+                                    break;
+                                    
+                                    case "Sunday": dayCell =7;
+                                        
+                                    break;
+
+                                   default:
+
+                                       break;                                      
+                                }
+                                
+                                timezoneNumber= Integer.parseInt(timezone2);
+                                if (timezoneNumber>=12)
+                                {
+                                    timezoneNumber= timezoneNumber-12;
+                                }else
+                                {
+                                    timezoneNumber= timezoneNumber+12;
+                                }   
+                                    
+                                System.out.println(dayCell);
+                                
+                       setValue(movie2,timezoneNumber ,dayCell); 
+                            
+                           }
+                       
+                       
+                        
+                      statement.close();
+                      dbConnection.close();
+                         
+         } catch(SQLException ex) 
+         {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();         
+         }
+         
+    
+                                           
+        
+    
+    
+    
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,7 +152,6 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
         BackToMenu = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         weekTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,13 +210,6 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
         weekTable.setVerifyInputWhenFocusTarget(false);
         jScrollPane2.setViewportView(weekTable);
 
-        jButton1.setText("test");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,9 +217,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(82, 82, 82))
+                .addGap(82, 726, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 856, Short.MAX_VALUE)
@@ -124,9 +227,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE))
         );
@@ -152,12 +253,6 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
             
         
     }//GEN-LAST:event_BackToMenuActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     
-        
-       
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -186,7 +281,6 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable weekTable;

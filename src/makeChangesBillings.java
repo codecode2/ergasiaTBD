@@ -2,7 +2,16 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
-
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Types;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,17 +23,67 @@ import java.awt.Window;
  */
 public class makeChangesBillings extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+     static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+     
+     String  timezone2 ;   
+   
+     int pricing;
+    int counter = 0; 
+    
+    int price2;
+    
     public makeChangesBillings() {
         
         
         initComponents();
         
          centreWindow(this);
+         mylist2();
     }
+ void mylist2()
+    {
+         
+        try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
 
+            CallableStatement  takeValues= dbConnection2.prepareCall("{call TakeValuesBillings(?,?)}");    
+            
+            takeValues.registerOutParameter(1, Types.VARCHAR);
+            takeValues.registerOutParameter(2, Types.INTEGER);
+            takeValues.executeUpdate();
+                   
+           
+             
+              
+             timezone2  = takeValues.getString(1);  
+             pricing = takeValues.getInt(2);
+              
+             System.out.println(pricing);
+
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }         
+        
+          
+            jTextField2.setText(String.valueOf(pricing));
+             
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,23 +139,23 @@ public class makeChangesBillings extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(102, 102, 102))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(235, 235, 235)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(173, 173, 173))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(113, 113, 113)
+                .addGap(181, 181, 181)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -130,7 +189,40 @@ public class makeChangesBillings extends javax.swing.JFrame {
     }//GEN-LAST:event_BackToMenuActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+           
+          String s = jTextField2.getText();
+           price2= Integer.parseInt(s);
+            
+          
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement editValues= dbConnection2.prepareCall("{call editValues(?,?,?,?,?,?,?)}");    
+           
+              editValues.setInt(1, price2);
+              editValues.setString(2,"Billings");
+              editValues.setString(3, timezone2);
+              editValues.setString(4, "");
+              editValues.setString(5, "");
+              editValues.setString(6, "");
+              editValues.setString(7, "");
+                   
+            
+              editValues.executeUpdate();
+  
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }   
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

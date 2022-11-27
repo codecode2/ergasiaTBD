@@ -2,6 +2,16 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+import java.sql.Types;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,17 +24,81 @@ import java.awt.Window;
  */
 public class makeChangesScheduled extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu2
-     */
+     static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+    static Connection dbConnection2 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515";
+    static Statement statement =null; 
+     String  day2;
+     String  timezone2 ;   
+     String  movie2;
+     int newid1;
+    int counter = 0; 
+    
+    String day22 ;
+    String  timezone22 ;
+    String movie22;
+    
+    
     public makeChangesScheduled() {
         
         
         initComponents();
         
          centreWindow(this);
+         mylist2();
+         
+         
     }
 
+     void mylist2()
+    {
+         
+        try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+
+            CallableStatement  takeValues= dbConnection2.prepareCall("{call TakeValuesScheduled(?,?,?,?)}");    
+           
+              takeValues.registerOutParameter(1, Types.INTEGER);
+              takeValues.registerOutParameter(2, Types.VARCHAR);
+              takeValues.registerOutParameter(3, Types.VARCHAR);
+              takeValues.registerOutParameter(4, Types.VARCHAR);
+              
+              
+              takeValues.executeUpdate();
+                   
+           
+             newid1 = takeValues.getInt(1);
+             day2 = takeValues.getString(2);
+             timezone2  = takeValues.getString(3);  
+             movie2   = takeValues.getString(4);
+              
+             
+
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }         
+        
+            jTextField1.setText(movie2);
+            jTextField2.setText(day2);
+            jTextField3.setText(timezone2);
+    } 
+    
+     
+     
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -162,7 +236,43 @@ public class makeChangesScheduled extends javax.swing.JFrame {
     }//GEN-LAST:event_BackToMenuActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+          
+        movie22 =jTextField1.getText();
+           day22 = jTextField2.getText();
+           timezone22= jTextField3.getText();
+             
+          
+         try{
+             Class.forName(driverClassName);
+                
+         } catch(ClassNotFoundException ex) {}
+         
+         try{
+                 
+                dbConnection2= DriverManager.getConnection(url,username,passwd); 
+                
+              CallableStatement editValues= dbConnection2.prepareCall("{call editValues(?,?,?,?,?,?,?)}");    
+           
+              editValues.setInt(1, newid1);
+              editValues.setString(2,"Scheduled");
+              editValues.setString(3, day22);
+              editValues.setString(4,timezone22 );
+              editValues.setString(5, movie22);
+              editValues.setString(6, "");
+              editValues.setString(7, "");
+                   
+            
+              editValues.executeUpdate();
+  
+        }
+         catch(SQLException ex) 
+           {
+            System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
+            ex=ex.getNextException();        
+           }   
+        
+                                          
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
