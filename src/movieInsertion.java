@@ -1,15 +1,18 @@
 
  
  
+ 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -133,9 +136,13 @@ public class movieInsertion extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         combocompany = new javax.swing.JComboBox<>();
+        duration1 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(175, 219, 238));
         jPanel1.setFocusCycleRoot(true);
 
         BackToMenu.setText("Main Menu");
@@ -166,6 +173,12 @@ public class movieInsertion extends javax.swing.JFrame {
             }
         });
 
+        duration.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                durationFocusLost(evt);
+            }
+        });
+
         comboCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
 
         jLabel5.setText("Select Company");
@@ -184,27 +197,41 @@ public class movieInsertion extends javax.swing.JFrame {
             }
         });
 
+        duration1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                duration1ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setText("h");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("m");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 162, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(comboCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(combocompany, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(duration, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                                 .addComponent(movieProducer, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(movieKind, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(movieName, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addComponent(movieName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(duration, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(duration1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,15 +239,20 @@ public class movieInsertion extends javax.swing.JFrame {
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(134, Short.MAX_VALUE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(105, 105, 105))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
+                .addGap(37, 37, 37)
+                .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(110, 110, 110)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(combocompany, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -228,7 +260,7 @@ public class movieInsertion extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(movieName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -243,8 +275,11 @@ public class movieInsertion extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(duration, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(68, 68, 68)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(duration1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addGap(90, 90, 90)
                 .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(91, 91, 91))
         );
@@ -253,25 +288,21 @@ public class movieInsertion extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackToMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackToMenuActionPerformed
-                this.hide();
-                MainMenu StartPage = new MainMenu();
-                StartPage.setVisible(true);
+        MainMenu StartPage = new MainMenu();
+                StartPage.setVisible(true);       
+                     this.hide();
+                
                 
     }//GEN-LAST:event_BackToMenuActionPerformed
 
@@ -281,33 +312,54 @@ public class movieInsertion extends javax.swing.JFrame {
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
                 
+        String compan=String.valueOf(combocompany.getSelectedItem()) ;
+        String custom=String.valueOf(comboCustomer.getSelectedItem()) ;
         
         String s="";
         String name= movieName.getText();
         String kind= movieKind.getText();
         String producer = movieProducer.getText();
-        String durationm=duration.getText();
-        
+        String durati=duration.getText();
+        String duration2=duration1.getText();
+         String durationm=durati+"h"+" "+duration2+"m";
+        boolean appear=false;
          
         
+        if(compan.equals("null") || custom.equals("null")){
+            
+             JOptionPane.showMessageDialog(jPanel1, "Make an option"); 
+        }  
+        else
+        {
               try{
-                    // εκχωρηση αυτοματου id και καταχωρηση του customer στη βαση
+                     
+                  
                    statement = dbConnection.createStatement();
-                     String selectString ="select count(id3) from movie";
+                     String selectString ="select * from movie order by id3 desc FETCH FIRST 1 ROWS ONLY";
                      rs=statement.executeQuery(selectString);
-
+                        
+                     
+                     
                      while(rs.next())
                      {
-                        int counter = rs.getInt("count(id3)");                     
-                        changeid3= javaid3+counter;
+                        int counter = rs.getInt("ID3");                     
+                        changeid3= counter+1;
                      }
                      
-                      insertMovie.setInt(1,changeid3++);  
+                      insertMovie.setInt(1,changeid3);  
                       insertMovie.setString(2,name);
                       insertMovie.setString(3,kind);
                       insertMovie.setString(4,producer);
                       insertMovie.setString(5,durationm);
-                      insertMovie.executeUpdate();  
+                      insertMovie.executeUpdate(); 
+                      
+                      CallableStatement  insertmoviepacket= dbConnection.prepareCall("{call  insertentry(?,?,?)}"); 
+                      
+                      insertmoviepacket.setString(1,compan );
+                      insertmoviepacket.setString(2,custom );
+                      insertmoviepacket.setString(3,name );
+                      insertmoviepacket.executeUpdate();
+                      
                       statement.close();
                       dbConnection.close();
 
@@ -318,17 +370,24 @@ public class movieInsertion extends javax.swing.JFrame {
                     {
                     System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
                     ex=ex.getNextException();
-
+                    appear=  true;
                     }
                    
                   }  
            
+              if (appear==false){
        moviePop1 moviepop1 = new moviePop1();
        moviepop1.show();
        this.hide();
-
+              }else
+              {
+               JOptionPane.showMessageDialog(jPanel1, "Something go wrong , try again please."); 
+             
+               
+              }
+           }      
     }//GEN-LAST:event_submitActionPerformed
-
+ 
     private void combocompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocompanyActionPerformed
         
         
@@ -393,6 +452,40 @@ public class movieInsertion extends javax.swing.JFrame {
          
     }//GEN-LAST:event_combocompanyItemStateChanged
 
+    private void durationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_durationFocusLost
+                String dur=duration.getText().trim();
+        
+        
+        if (!dur.matches("[ 0-9 ]*") )
+       
+       {
+       
+                 JOptionPane.showMessageDialog(jPanel1, "Something go wrong, please try again"); 
+                   duration.setText("");
+       }
+    
+        
+        
+    }//GEN-LAST:event_durationFocusLost
+
+    private void duration1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_duration1ActionPerformed
+                String dur2=duration1.getText().trim();
+        
+        
+        if (!dur2.matches("[ 0-9 ]*") )
+       
+       {
+       
+                 JOptionPane.showMessageDialog(jPanel1, "Something go wrong, please try again"); 
+                   duration1.setText("");
+       }
+    
+        
+        
+        
+        
+    }//GEN-LAST:event_duration1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -439,12 +532,15 @@ public class movieInsertion extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboCustomer;
     private javax.swing.JComboBox<String> combocompany;
     private javax.swing.JTextField duration;
+    private javax.swing.JTextField duration1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField movieKind;
     private javax.swing.JTextField movieName;

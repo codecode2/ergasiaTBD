@@ -8,7 +8,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+ import java.sql.Statement;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
+import java.sql.CallableStatement;
+import java.sql.Types;
+import javax.swing.JOptionPane;
+import javax.swing.*; 
+import java.util.Date;
+import java.text.SimpleDateFormat;  
+import java.text.DateFormat;  
+import java.text.Format;  
+import java.util.Calendar;  
+
  
  
 /**
@@ -19,7 +33,15 @@ public class MainMenu extends javax.swing.JFrame implements Runnable{
 SimpleDateFormat timeFormat;
 String time;
  boolean x=false;
-  
+     static String driverClassName="oracle.jdbc.OracleDriver";
+    static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
+    static Connection dbConnection = null;
+     static Connection dbConnection2 = null;
+      static Connection dbConnection3 = null;
+    static String username = "it175093";
+    static String passwd = "Powerteam1515"; 
+     String todayUpdated ;
+
    
     public MainMenu()
     {      
@@ -29,9 +51,68 @@ String time;
         Thread t=new Thread(this);
         t.start();
         
-        
+        changeMovie();
     }
    
+    void changeMovie()
+    
+    {
+             timeFormat = new SimpleDateFormat("HH:mm:ss");      
+        time=timeFormat.format(Calendar.getInstance().getTime());
+        int timezone = Integer.parseInt(time.substring(0,2));
+            Format f = new SimpleDateFormat("EEEE");  
+            String today = f.format(new Date());  
+            if(today.equals("Κυριακή")){ today="Sunday"; }
+              else if(today.equals("Δευτέρα")){ today="Monday"; }
+              else if(today.equals("Τρίτη")){ today="Tuesday"; }
+              else if(today.equals("Τετάρτη")){ today="Wednesday"; }
+              else if(today.equals("Πέμπτη")){ today="Thursday"; }
+              else if(today.equals("Παρασκευή")){ today="Friday"; }
+              else if(today.equals("Σάββατο")){ today="Saturday"; }
+              
+            
+            
+        
+            try{     
+              dbConnection3= DriverManager.getConnection(url,username,passwd);
+               CallableStatement  insertSchedule= dbConnection3.prepareCall("{call  changeMovie(?,?,?)}"); 
+               
+              
+               insertSchedule.setInt(1,timezone);
+                insertSchedule.setString(2,today);
+                insertSchedule.registerOutParameter(3, Types.VARCHAR);
+
+                 
+                 
+                 insertSchedule.executeUpdate();
+                 
+                 
+                 todayUpdated=insertSchedule.getString(3);
+                String todayUpdated2 = String.valueOf(todayUpdated);
+                  if(todayUpdated2.equals("null"))
+                  {
+                  
+                      todayUpdated2= "advertisements";
+                  }
+              todayUpdated2= todayUpdated2.toUpperCase();
+              
+                    movieText.setText(todayUpdated2);
+                  
+                
+           }catch(SQLException ex)
+             {
+                 
+                 while(ex != null){
+                 System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
+                 ex=ex.getNextException();
+             
+              }
+           }
+                  
+
+    
+    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,7 +130,7 @@ String time;
         AboutButton = new javax.swing.JButton();
         liveNow = new javax.swing.JTextField();
         animatedText = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        movieText = new javax.swing.JLabel();
         timeText = new javax.swing.JLabel();
         insertMovie = new javax.swing.JButton();
 
@@ -65,7 +146,7 @@ String time;
         jPanel1.setBackground(new java.awt.Color(141, 194, 190));
         jPanel1.setFocusCycleRoot(true);
 
-        WeeklyProgramBUTTON.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
+        WeeklyProgramBUTTON.setFont(new java.awt.Font("Leelawadee UI", 1, 24)); // NOI18N
         WeeklyProgramBUTTON.setText("Weekly TV Schedule");
         WeeklyProgramBUTTON.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,30 +198,26 @@ String time;
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("INSERT WHAT THE CHANNEL IS PLAYING NOW");
+        movieText.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        movieText.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         timeText.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        timeText.setText("jLabel2");
 
         javax.swing.GroupLayout animatedTextLayout = new javax.swing.GroupLayout(animatedText);
         animatedText.setLayout(animatedTextLayout);
         animatedTextLayout.setHorizontalGroup(
             animatedTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, animatedTextLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(timeText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(43, 43, 43))
+                .addComponent(timeText, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                .addGap(78, 78, 78)
+                .addComponent(movieText, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52))
         );
         animatedTextLayout.setVerticalGroup(
             animatedTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(animatedTextLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(timeText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, animatedTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(timeText, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                .addComponent(movieText, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
         );
 
         insertMovie.setFont(new java.awt.Font("Leelawadee", 1, 14)); // NOI18N
@@ -156,48 +233,47 @@ String time;
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(87, 87, 87)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(NewCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TimelineInsertionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AboutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(insertMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(283, 283, 283))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(211, 211, 211)
-                        .addComponent(liveNow)
-                        .addGap(281, 281, 281))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(animatedText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(87, 87, 87))))
+                .addGap(104, 104, 104)
+                .addComponent(animatedText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(297, 297, 297)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(NewCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TimelineInsertionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(AboutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(insertMovie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(283, 283, 283))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(WeeklyProgramBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(218, 218, 218))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(liveNow, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(241, 241, 241))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(WeeklyProgramBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(242, 242, 242))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(61, 61, 61)
-                .addComponent(liveNow)
-                .addGap(44, 44, 44)
+                .addGap(37, 37, 37)
+                .addComponent(liveNow, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addComponent(animatedText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(32, 32, 32)
-                .addComponent(WeeklyProgramBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(NewCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addGap(60, 60, 60)
+                .addComponent(WeeklyProgramBUTTON, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56)
+                .addComponent(NewCustomerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(insertMovie, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(insertMovie, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TimelineInsertionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(TimelineInsertionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(EditButton, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(AboutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(AboutButton, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                 .addGap(39, 39, 39))
         );
 
@@ -340,9 +416,9 @@ String time;
     private javax.swing.JButton WeeklyProgramBUTTON;
     private javax.swing.JPanel animatedText;
     private javax.swing.JButton insertMovie;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField liveNow;
+    private javax.swing.JLabel movieText;
     private javax.swing.JLabel timeText;
     // End of variables declaration//GEN-END:variables
 

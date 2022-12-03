@@ -1,5 +1,7 @@
 
- 
+ import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
+import javax.swing.table.DefaultTableCellRenderer;
  
  
  
@@ -27,12 +30,17 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
     static PreparedStatement insertValues = null;
     int dayCell;
     int timezoneNumber;
-    
+     
     
     public void setValue(String value,int x,int y)
     {
        
         weekTable.setValueAt(value, x, y);
+       
+ 
+ 
+ 
+ 
     
     }
     
@@ -112,9 +120,8 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
                                     timezoneNumber= timezoneNumber+12;
                                 }   
                                     
-                                System.out.println(dayCell);
-                                
-                       setValue(movie2,timezoneNumber ,dayCell); 
+                               
+                       setValue(movie2.toUpperCase(),timezoneNumber ,dayCell); 
                             
                            }
                        
@@ -155,6 +162,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(194, 201, 255));
         jPanel1.setFocusCycleRoot(true);
 
         BackToMenu.setText("Main Menu");
@@ -166,6 +174,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
 
         weekTable.setAutoCreateRowSorter(true);
         weekTable.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        weekTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         weekTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"12:00", null, null, null, "", null, null, null},

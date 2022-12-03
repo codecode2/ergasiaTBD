@@ -8,7 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
- 
+import javax.swing.JOptionPane;
+import javax.swing.*; 
 import java.sql.Types;
  
 
@@ -45,7 +46,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     String  newEmail2;
     String  newPhone2;
     String  newCompany2;
-        
+    boolean appear=true;    
     
     public makeChangesCustomer() {
         
@@ -64,7 +65,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     
     void mylist2()
     {
-         
+            
         try{
              Class.forName(driverClassName);
                 
@@ -134,6 +135,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBackground(new java.awt.Color(144, 192, 190));
         jPanel1.setFocusCycleRoot(true);
 
         BackToMenu.setText("Main menu");
@@ -159,15 +161,32 @@ public class makeChangesCustomer extends javax.swing.JFrame {
 
         jLabel1.setText("Firstname");
 
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
 
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
+
         jLabel2.setText("Lastname");
 
         jLabel3.setText("Email");
+
+        jTextField4.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField4FocusLost(evt);
+            }
+        });
 
         jLabel4.setText("Phone");
 
@@ -180,13 +199,13 @@ public class makeChangesCustomer extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                    .addComponent(BackToMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102))
+                .addGap(67, 67, 67))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(275, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,7 +227,7 @@ public class makeChangesCustomer extends javax.swing.JFrame {
                         .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(149, 149, 149))
+                .addGap(86, 86, 86))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,9 +254,9 @@ public class makeChangesCustomer extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveChanges, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(41, 41, 41))
         );
@@ -246,16 +265,11 @@ public class makeChangesCustomer extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -272,7 +286,9 @@ public class makeChangesCustomer extends javax.swing.JFrame {
            
         
         
-        
+        int a = JOptionPane.showConfirmDialog(jPanel1,"Do you want to continue?" );
+                    
+                if(a==JOptionPane.YES_OPTION){
         
            newFirstname2=jTextField1.getText();
            newLastname2 = jTextField2.getText();
@@ -281,7 +297,6 @@ public class makeChangesCustomer extends javax.swing.JFrame {
            newCompany2= jTextField5.getText();
         
         
-        System.out.println(newFirstname2);
         
          try{
              Class.forName(driverClassName);
@@ -311,10 +326,19 @@ public class makeChangesCustomer extends javax.swing.JFrame {
          catch(SQLException ex) 
            {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
-            ex=ex.getNextException();        
-           }   
-        
-        
+            ex=ex.getNextException();  
+            
+            appear=false;
+           } 
+         
+       
+           if(appear==false){
+             JOptionPane.showMessageDialog(jPanel1, "Something go wrong , try again please."); 
+         }else{
+         
+        JOptionPane.showMessageDialog(jPanel1, "Your choices have been saved"); 
+           }
+     }
         
         
         
@@ -329,6 +353,61 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+                String fname= jTextField1.getText().trim();
+     
+     if (fname=="null"){     
+         
+         
+     }else{
+       if (!fname.matches("[ Α-Ωα-ωA-Za-z ]*") )
+       
+       {
+       
+                 JOptionPane.showMessageDialog(jPanel1, "Something go wrong, please try again"); 
+                   jTextField1.setText("");
+       }
+           
+     }     
+           
+           
+    }//GEN-LAST:event_jTextField1FocusLost
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+               String lname= jTextField2.getText().trim();
+     
+     if (lname=="null"){     
+         
+         
+     }else{
+       if (!lname.matches("[ Α-Ωα-ωA-Za-z ]*") )
+       
+       {
+       
+                 JOptionPane.showMessageDialog(jPanel1, "Something go wrong, please try again"); 
+                   jTextField2.setText("");
+       }
+           
+     }     
+           
+           
+    }//GEN-LAST:event_jTextField2FocusLost
+
+    private void jTextField4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField4FocusLost
+              String phoneN=jTextField4.getText().trim();
+        
+        
+        if (!phoneN.matches("[ 0-9 ]*") )
+       
+       {
+       
+                 JOptionPane.showMessageDialog(jPanel1, "Something go wrong, please try again"); 
+                   jTextField4.setText("");
+       }
+    
+        
+    }//GEN-LAST:event_jTextField4FocusLost
 
     /**
      * @param args the command line arguments
