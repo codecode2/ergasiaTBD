@@ -30,27 +30,25 @@ import java.util.Calendar;
  * @author Chameleon
  */
 public class MainMenu extends javax.swing.JFrame implements Runnable{
-SimpleDateFormat timeFormat;
-String time;
- boolean x=false;
-     static String driverClassName="oracle.jdbc.OracleDriver";
+    SimpleDateFormat timeFormat;
+    String time;
+     boolean x=false;
+    static String driverClassName="oracle.jdbc.OracleDriver";
     static String url = "jdbc:oracle:thin:@192.168.6.21:1521/dblabs";
     static Connection dbConnection = null;
-     static Connection dbConnection2 = null;
-      static Connection dbConnection3 = null;
+    static Connection dbConnection2 = null;
+    static Connection dbConnection3 = null;
     static String username = "it175093";
     static String passwd = "Powerteam1515"; 
-     String todayUpdated ;
+    String todayUpdated ;
 
    
     public MainMenu()
     {      
-       initComponents(); 
+        initComponents(); 
         centreWindow(this);
-        
         Thread t=new Thread(this);
-        t.start();
-        
+        t.start(); 
         changeMovie();
     }
    
@@ -58,45 +56,32 @@ String time;
     
     {
              timeFormat = new SimpleDateFormat("HH:mm:ss");      
-        time=timeFormat.format(Calendar.getInstance().getTime());
-        int timezone = Integer.parseInt(time.substring(0,2));
-            Format f = new SimpleDateFormat("EEEE");  
-            String today = f.format(new Date());  
-            if(today.equals("Κυριακή")){ today="Sunday"; }
-              else if(today.equals("Δευτέρα")){ today="Monday"; }
-              else if(today.equals("Τρίτη")){ today="Tuesday"; }
-              else if(today.equals("Τετάρτη")){ today="Wednesday"; }
-              else if(today.equals("Πέμπτη")){ today="Thursday"; }
-              else if(today.equals("Παρασκευή")){ today="Friday"; }
-              else if(today.equals("Σάββατο")){ today="Saturday"; }
-              
-            
-            
-        
+             time=timeFormat.format(Calendar.getInstance().getTime());
+             int timezone = Integer.parseInt(time.substring(0,2));
+             Format f = new SimpleDateFormat("EEEE");  
+             String today = f.format(new Date());  
+             if(today.equals("Κυριακή")){ today="Sunday"; }
+             else if(today.equals("Δευτέρα")){ today="Monday"; }
+             else if(today.equals("Τρίτη")){ today="Tuesday"; }
+             else if(today.equals("Τετάρτη")){ today="Wednesday"; }
+             else if(today.equals("Πέμπτη")){ today="Thursday"; }
+             else if(today.equals("Παρασκευή")){ today="Friday"; }
+             else if(today.equals("Σάββατο")){ today="Saturday"; }
             try{     
               dbConnection3= DriverManager.getConnection(url,username,passwd);
                CallableStatement  insertSchedule= dbConnection3.prepareCall("{call  changeMovie(?,?,?)}"); 
-               
-              
                insertSchedule.setInt(1,timezone);
-                insertSchedule.setString(2,today);
-                insertSchedule.registerOutParameter(3, Types.VARCHAR);
-
-                 
-                 
-                 insertSchedule.executeUpdate();
-                 
-                 
-                 todayUpdated=insertSchedule.getString(3);
-                String todayUpdated2 = String.valueOf(todayUpdated);
+               insertSchedule.setString(2,today);
+               insertSchedule.registerOutParameter(3, Types.VARCHAR);
+               insertSchedule.executeUpdate();
+               todayUpdated=insertSchedule.getString(3);
+               String todayUpdated2 = String.valueOf(todayUpdated);
                   if(todayUpdated2.equals("null"))
                   {
-                  
                       todayUpdated2= "advertisements";
                   }
               todayUpdated2= todayUpdated2.toUpperCase();
-              
-                    movieText.setText(todayUpdated2);
+              movieText.setText(todayUpdated2);
                   
                 
            }catch(SQLException ex)
@@ -215,9 +200,8 @@ String time;
         );
         animatedTextLayout.setVerticalGroup(
             animatedTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, animatedTextLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(timeText, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                .addComponent(movieText, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
+            .addComponent(movieText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(timeText, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         insertMovie.setFont(new java.awt.Font("Leelawadee", 1, 14)); // NOI18N
@@ -353,16 +337,14 @@ String time;
              public void run() {
               
                 while(true)
-                {
-                  
-                  
+                {                                 
                    if((x==false)){
                     liveNow.setBackground(Color.black);
                     liveNow.setForeground(Color.red);
                     x=true;
                 } else{
                     liveNow.setBackground(Color.red);
-                     liveNow.setForeground(Color.black);
+                    liveNow.setForeground(Color.black);
                    
                     x=false;
                 }
@@ -427,22 +409,21 @@ String time;
 
 
     @Override
-    public void run() {
-          while(true){
-               timeFormat = new SimpleDateFormat("HH:mm:ss");      
-        time=timeFormat.format(Calendar.getInstance().getTime());
-        timeText.setText(time);
+    public void run() 
+    {
+          while(true)
+          {
+                timeFormat = new SimpleDateFormat("HH:mm:ss");      
+                time=timeFormat.format(Calendar.getInstance().getTime());
+                timeText.setText(time);
           try {
                   Thread.sleep(1000);
               } catch (InterruptedException ex) {
                   Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
               }
           
-       }    
+           }    
     }
-
-
-   
    
 }
 

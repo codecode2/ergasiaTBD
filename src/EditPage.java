@@ -219,11 +219,6 @@ public class EditPage extends javax.swing.JFrame {
                  s=true;
              
              }
-            
-          
-           
-            
-            
             if(tableSelection1.equals("") || (s) )
             { 
                 
@@ -237,27 +232,16 @@ public class EditPage extends javax.swing.JFrame {
             {
                  String parts[] = tableSelection2.split(" ");
          try{
-              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             dbConnection= DriverManager.getConnection(url,username,passwd);  
              statement = dbConnection.createStatement();
              
-              int x=Integer.parseInt(parts[0]);
+             int x=Integer.parseInt(parts[0]);
               
              String SelectString="{  call InsertionRestoring(?,?)}";
-              
-             
-             
-               insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
-               insertValues.setInt(1,x);
-              
-               insertValues.setString(2, tableSelection1);
-             
-               insertValues.executeUpdate();
-                
-              
-           
+             insertValues= dbConnection.prepareStatement(SelectString); 
+             insertValues.setInt(1,x);
+             insertValues.setString(2, tableSelection1);
+             insertValues.executeUpdate();
          } catch(SQLException ex) 
          {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
@@ -273,24 +257,15 @@ public class EditPage extends javax.swing.JFrame {
             {
                 String parts[] = tableSelection2.split(" ");
          try{
-              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             dbConnection= DriverManager.getConnection(url,username,passwd);  
              statement = dbConnection.createStatement();
              
-              int x=Integer.parseInt(parts[0]);
-              
+             int x=Integer.parseInt(parts[0]); 
              String SelectString="{  call InsertionRestoring(?,?)}";
-              
-             
-             
-               insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
-               insertValues.setInt(1,x);
-              
-               insertValues.setString(2, tableSelection1);
-             
-               insertValues.executeUpdate();
+             insertValues= dbConnection.prepareStatement(SelectString);  
+             insertValues.setInt(1,x); 
+             insertValues.setString(2, tableSelection1);
+             insertValues.executeUpdate();
                 
               
            
@@ -315,18 +290,10 @@ public class EditPage extends javax.swing.JFrame {
              
               int x=Integer.parseInt(parts[0]);
               
-             String SelectString="{  call InsertionRestoring(?,?)}";
-              
-             
-             
+             String SelectString="{  call InsertionRestoring(?,?)}";         
                insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
                insertValues.setInt(1,x);
-              
                insertValues.setString(2, tableSelection1);
-             
                insertValues.executeUpdate();
                 
               
@@ -336,9 +303,7 @@ public class EditPage extends javax.swing.JFrame {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
             ex=ex.getNextException();         
          }  
-        
-         
-        
+       
                 makeChangesMovie makechange3 = new makeChangesMovie();
                 makechange3.show();
                 this.hide();
@@ -349,21 +314,11 @@ public class EditPage extends javax.swing.JFrame {
          try{
               dbConnection= DriverManager.getConnection(url,username,passwd);  
              statement = dbConnection.createStatement();
-             
               int x=Integer.parseInt(parts[0]);
-              
              String SelectString="{  call InsertionRestoring(?,?)}";
-              
-             
-             
                insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
-               insertValues.setInt(1,x);
-              
+               insertValues.setInt(1,x); 
                insertValues.setString(2, tableSelection1);
-             
                insertValues.executeUpdate();
                 
               
@@ -373,10 +328,8 @@ public class EditPage extends javax.swing.JFrame {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
             ex=ex.getNextException();         
          }  
-        
-         
-        
-                 makeChangesScheduled makechange4 = new makeChangesScheduled();
+
+                makeChangesScheduled makechange4 = new makeChangesScheduled();
                 makechange4.show();
                 this.hide();
             
@@ -385,24 +338,14 @@ public class EditPage extends javax.swing.JFrame {
             {
                String parts[] = tableSelection2.split(" ");
          try{
-              dbConnection= DriverManager.getConnection(url,username,passwd);  
+             dbConnection= DriverManager.getConnection(url,username,passwd);  
              statement = dbConnection.createStatement();
-             
-              int x=Integer.parseInt(parts[0]);
-              
+             int x=Integer.parseInt(parts[0]); 
              String SelectString="{  call InsertionRestoring(?,?)}";
-              
-             
-             
-               insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
-               insertValues.setInt(1,x);
-              
-               insertValues.setString(2, tableSelection1);
-             
-               insertValues.executeUpdate();
+             insertValues= dbConnection.prepareStatement(SelectString);
+             insertValues.setInt(1,x);
+             insertValues.setString(2, tableSelection1);
+             insertValues.executeUpdate();
                 
               
            
@@ -411,9 +354,7 @@ public class EditPage extends javax.swing.JFrame {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
             ex=ex.getNextException();         
          }  
-        
-         
-          
+             
                 makeChangesBillings makechange5 = new makeChangesBillings();
                 makechange5.show();
                 this.hide();
@@ -438,19 +379,12 @@ public class EditPage extends javax.swing.JFrame {
                           mylist.clear();
                            
                            
-                        }
-             
+                        }             
                      dbConnection= DriverManager.getConnection(url,username,passwd);  
                      statement = dbConnection.createStatement();
                    
-                     String selectString ="select * from "+tableSelection;
-                     
-                     
-                     rs=statement.executeQuery(selectString);
-                        
-                       
-                       
-                      
+                     String selectString ="select * from "+tableSelection;                                    
+                     rs=statement.executeQuery(selectString);     
                       if (tableSelection.equals("Company"))
                        {
                         while(rs.next())
@@ -469,9 +403,7 @@ public class EditPage extends javax.swing.JFrame {
                         while(rs.next())
                            {
                            String time1 = rs.getString("TM");
-                           int price = rs.getInt("PRICE");
-                           
-
+                           int price = rs.getInt("PRICE");                          
                             mylist.addElement(time1+" "+price); 
                               delete.setVisible(false);
                            }
@@ -510,17 +442,11 @@ public class EditPage extends javax.swing.JFrame {
                            int getid = rs.getInt("sid2");
                            String day2 = rs.getString("day2");
                            String timezone2 = rs.getString("timezone2");
-                           String movie2 = rs.getString("movie2");
-                            
-                           
-                            mylist.addElement(getid+" "+day2+" "+timezone2+" "+movie2);                                          
-                           }
-                         
-                       }
-                     
-                      
+                           String movie2 = rs.getString("movie2");                                                      
+                           mylist.addElement(getid+" "+day2+" "+timezone2+" "+movie2);                                          
+                           }                         
+                       }                    
                       listofOptions.setModel(mylist);
-                      
                       statement.close();
                       dbConnection.close();
                  
@@ -542,7 +468,6 @@ public class EditPage extends javax.swing.JFrame {
           if (tableSelection2.equals("null"))
           {
               
-             
              JOptionPane.showMessageDialog(jPanel1, "There are no choises.Please make an option");
              
               
@@ -560,20 +485,11 @@ public class EditPage extends javax.swing.JFrame {
               int x=Integer.parseInt(parts[0]);
               
              String SelectString="{  call DELETION(?,?)}";
-              
-             
-             
                insertValues= dbConnection.prepareStatement(SelectString);
-              
-                
-                
-               insertValues.setInt(1,x);
-              
-               insertValues.setString(2, tableSelection1);
-             
-               insertValues.executeUpdate();
-                      
-                       
+               insertValues.setInt(1,x);              
+               insertValues.setString(2, tableSelection1);             
+               insertValues.executeUpdate();                     
+               
          } catch(SQLException ex) 
          {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());

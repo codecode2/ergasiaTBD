@@ -374,52 +374,32 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
               
               
               dbConnection3= DriverManager.getConnection(url,username,passwd);
-               CallableStatement  insertSchedule= dbConnection3.prepareCall("{call  insertSchedule(?,?,?)}"); 
-               
-               
-                CallableStatement  takemovietime= dbConnection3.prepareCall("{call  givetime(?,?)}"); 
-                
-                takemovietime.setString(1, movienull);
-             
-               takemovietime.registerOutParameter(2,Types.VARCHAR);
-               
-               takemovietime.executeUpdate();
-               
-               String duration = takemovietime.getString(2);
-               
-               int dur=  Integer.valueOf(duration.substring(0, 1));
-               int timechanger = Integer.valueOf(time);
-            
-               
-               insertSchedule.setString(1,day1);
-                insertSchedule.setString(2,time);
-                 insertSchedule.setString(3,movienull);
-                 
-                
-                 insertSchedule.executeUpdate();
-                
-                 
-               
-             
-                 
+              CallableStatement  insertSchedule= dbConnection3.prepareCall("{call  insertSchedule(?,?,?)}");                               
+              CallableStatement  takemovietime= dbConnection3.prepareCall("{call  givetime(?,?)}");                
+              takemovietime.setString(1, movienull);
+              takemovietime.registerOutParameter(2,Types.VARCHAR);               
+              takemovietime.executeUpdate();
+              String duration = takemovietime.getString(2);
+              int dur=  Integer.valueOf(duration.substring(0, 1));
+              int timechanger = Integer.valueOf(time); 
+              insertSchedule.setString(1,day1);
+              insertSchedule.setString(2,time);
+              insertSchedule.setString(3,movienull); 
+              insertSchedule.executeUpdate();
                  if (dur>0)
                  {
-                    if(timechanger ==24){
-                
+                    if(timechanger ==24){                
                     timechanger=0;
                 
                  }  
                      
                  timechanger++;
                  time = String.valueOf(timechanger);
-                 insertSchedule.setString(1,day1);
+                insertSchedule.setString(1,day1);
                 insertSchedule.setString(2,time);
-                 insertSchedule.setString(3,movienull);
-                 insertSchedule.executeUpdate();
-
-                 
-                 }
-                  
+                insertSchedule.setString(3,movienull);
+                insertSchedule.executeUpdate();
+                 }                  
                  if (dur>1)
                  {
                  if(timechanger ==24){
@@ -430,15 +410,16 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
                      
                     timechanger++;
                     time = String.valueOf(timechanger);
-                 insertSchedule.setString(1,day1);
+                insertSchedule.setString(1,day1);
                 insertSchedule.setString(2,time);
-                 insertSchedule.setString(3,movienull);
-                   insertSchedule.executeUpdate();
+                insertSchedule.setString(3,movienull);
+                insertSchedule.executeUpdate();
                  
                  }
                   if (dur>2)
                  {
-                 if(timechanger ==24){
+                 if(timechanger ==24)
+                 {
                 
                     timechanger=0;
                 
@@ -485,9 +466,7 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
            }
         if (wrong==false)
         {
-                         JOptionPane.showMessageDialog(jPanel1, "Something go Wrong. Try again please");
-               
-        
+           JOptionPane.showMessageDialog(jPanel1, "Something go Wrong. Try again please");
         }else 
             
         {
@@ -495,8 +474,6 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
              popupInsertMovie   popup = new popupInsertMovie();
              this.hide();
              popup.show();
-        
-        
         }
 
        }
@@ -505,63 +482,52 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-         int open=0 ;
-        
-            String movie= movie1.getSelectedValue();
-           String movienull = String.valueOf(movie1.getSelectedValue());
-            String time =String.valueOf(time1.getSelectedItem());
-            String day1 = String.valueOf(day.getSelectedItem());
+         int open=0 ;        
+         String movie= movie1.getSelectedValue();
+         String movienull = String.valueOf(movie1.getSelectedValue());
+         String time =String.valueOf(time1.getSelectedItem());
+         String day1 = String.valueOf(day.getSelectedItem());
                
-        
-        
         if (  time.equals("")||day1.equals("") || movienull.equals("null"))
-        
-        {
-                                  
+        {                                 
             JOptionPane.showMessageDialog(jPanel1, "Make an option");
- 
         }else
             
-          { try{     
-              dbConnection3= DriverManager.getConnection(url,username,passwd);
-               CallableStatement  available= dbConnection3.prepareCall("{call available(?,?,?)}"); 
-               
-              
-               available.setString(1,day1);
-                available.setString(2,time);
-                 available.registerOutParameter(3, Types.INTEGER);
-                 
-                 
-                 available.executeUpdate();
-                 
-                 open = available.getInt(3);
-                  
-                  available.close();
-                dbConnection3.close();
-                  
-           }catch(SQLException ex)
-             {
-                 
-                 while(ex != null){
-                 System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
-                 ex=ex.getNextException();
-                 
-             
-              }
-           }
-        if (open==1)
-        {
-                         JOptionPane.showMessageDialog(jPanel1, "This date it's not available");
-               
-        
-        }else 
-            
-        {
-            JOptionPane.showMessageDialog(jPanel1, "This date it's available");
-        
-        }
+            { try
+                {     
+                  dbConnection3= DriverManager.getConnection(url,username,passwd);
+                   CallableStatement  available= dbConnection3.prepareCall("{call available(?,?,?)}"); 
+                   available.setString(1,day1);
+                   available.setString(2,time);
+                   available.registerOutParameter(3, Types.INTEGER);
+                   available.executeUpdate();
+                   open = available.getInt(3);
+                   available.close();
+                   dbConnection3.close();
 
-       }
+                   }catch(SQLException ex)
+                 {
+
+                     while(ex != null){
+                     System.out.println("\n -- SQL Exception -- \n" + ex.getMessage());
+                     ex=ex.getNextException();
+
+
+                  }
+                    }
+                 if (open==1)
+                 {
+                                  JOptionPane.showMessageDialog(jPanel1, "This date it's not available");
+
+
+                 }else 
+
+                 {
+                     JOptionPane.showMessageDialog(jPanel1, "This date it's available");
+
+                 }
+
+            }
         
         
         
@@ -589,18 +555,11 @@ public class InsertionTimelinePage extends javax.swing.JFrame {
           { try{     
               dbConnection3= DriverManager.getConnection(url,username,passwd);
                CallableStatement  price= dbConnection3.prepareCall("{call price(?,?)}"); 
-               
-              
-                
                 price.setString(1,time);
-                 price.registerOutParameter(2, Types.INTEGER);
-                 
-                 
-                 price.executeUpdate();
-                 
-                 pricing = price.getInt(2);
-                  
-                  price.close();
+                price.registerOutParameter(2, Types.INTEGER);  
+                price.executeUpdate();                 
+                pricing = price.getInt(2);                  
+                price.close();
                 dbConnection3.close();
                   
            }catch(SQLException ex)

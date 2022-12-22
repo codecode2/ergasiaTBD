@@ -150,7 +150,7 @@
                       <Data value="null"/>
                     </Column>
                     <Column editable="true" title="Wednesday" type="java.lang.Object"/>
-                    <Column editable="true" title="Thirsday" type="java.lang.Object">
+                    <Column editable="true" title="Thursday" type="java.lang.Object">
                       <Data value=""/>
                       <Data value="null"/>
                       <Data value="null"/>
@@ -227,6 +227,7 @@
                     </Column>
                   </TableColumnModel>
                 </Property>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusCycleRoot" type="boolean" value="true"/>
                 <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="0" red="33" type="rgb"/>

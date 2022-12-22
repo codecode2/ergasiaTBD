@@ -361,54 +361,37 @@ public class NewCustomerMenu extends javax.swing.JFrame {
        
           Pop2 popup2 = new Pop2();
           popup2.show();
-          this.hide();
-          
-          
-          
+          this.hide();   
      
        } else { 
         
             try{
                     // εκχωρηση αυτοματου id και καταχωρηση του customer στη βαση
                    statement = dbConnection.createStatement();
-                     String selectString ="select * from customer order by id1 desc FETCH FIRST 1 ROWS ONLY" ;
-                                               
-                                               
+                     String selectString ="select * from customer order by id1 desc FETCH FIRST 1 ROWS ONLY" ;                                                                                              
                      rs=statement.executeQuery(selectString);
-
                      while(rs.next())
                      {
-                     int counter = rs.getInt("ID1");
-                        
-                     System.out.println(counter);
-                            
-                       changeid=counter+1;
+                     int counter = rs.getInt("ID1");                        
+                     System.out.println(counter);                            
+                     changeid=counter+1;
                      }
-                        
-                     
-
+                                            
                     insertCustomer.setInt(1,changeid);  
                     insertCustomer.setString(2,fname);
-                     insertCustomer.setString(3,lname);
-                     insertCustomer.setString(4,mail);
-                     insertCustomer.setString(5,phoneN);
-                     insertCustomer.setString(6,Company);
-                     insertCustomer.executeUpdate();  
-                 
-                     
-                   
-                     
+                    insertCustomer.setString(3,lname);
+                    insertCustomer.setString(4,mail);
+                    insertCustomer.setString(5,phoneN);
+                    insertCustomer.setString(6,Company);
+                    insertCustomer.executeUpdate();  
+      
                CallableStatement  checkIfExists= dbConnection.prepareCall("{call  checkIfExists(?,?)}"); 
                
                String exist ;
                checkIfExists.setString(1,Company);
-                    checkIfExists.registerOutParameter(2, Types.VARCHAR);
-                
-                 checkIfExists.executeUpdate();
-                 
-                  exist = checkIfExists.getString(2);
-                  
-                  
+               checkIfExists.registerOutParameter(2, Types.VARCHAR);
+               checkIfExists.executeUpdate();
+               exist = checkIfExists.getString(2);                                    
                  if (Company.equals(exist))
                  {
                      
@@ -423,12 +406,9 @@ public class NewCustomerMenu extends javax.swing.JFrame {
 
                      while(rs.next())
                      {
-                     int counter = rs.getInt("ID2");
-                     
+                     int counter = rs.getInt("ID2");                    
                        changeid2= counter+1;
-                     }
-                     
-                      
+                     }                                          
                      insertCompany.setInt(1,changeid2);
                      insertCompany.setString(2, Company);
                      
@@ -447,15 +427,11 @@ public class NewCustomerMenu extends javax.swing.JFrame {
                         locationcompany="-"; 
                     } 
                         
-                      insertCompany.setString(3,mailcompany);
-                      insertCompany.setString(4,phonecompany);
-                     insertCompany.setString(5,locationcompany);
-                     
-                     insertCompany.executeUpdate();
-                     
-                     
-                     
-                      statement.close();
+                     insertCompany.setString(3,mailcompany);
+                     insertCompany.setString(4,phonecompany);
+                     insertCompany.setString(5,locationcompany);                    
+                     insertCompany.executeUpdate();                                                            
+                     statement.close();
                      dbConnection.close();
                  }
             } catch(SQLException ex)

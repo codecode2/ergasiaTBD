@@ -33,23 +33,14 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
      
     
     public void setValue(String value,int x,int y)
-    {
-       
-        weekTable.setValueAt(value, x, y);
-       
- 
- 
- 
- 
-    
+    {   
+        weekTable.setValueAt(value, x, y); 
     }
     
       
     
-    public WeeklyProgramPage() {
-        
-      
-         
+    public WeeklyProgramPage() 
+    {     
         initComponents();
         centreWindow(this);
         tablelist();
@@ -57,25 +48,12 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
     }
 
     void tablelist()
-    {
-        
-              
-                try{
-                   
-             
+    {  
+                try{                         
                      dbConnection= DriverManager.getConnection(url,username,passwd);  
-                     statement = dbConnection.createStatement();
-                   
+                     statement = dbConnection.createStatement();               
                      String selectString ="select * from scheduled";
-                     
-                     
-                     rs=statement.executeQuery(selectString);
-                        
-                       
-                       
-                      
-                      
-                       
+                     rs=statement.executeQuery(selectString);   
                         while(rs.next())
                            {
                            String day2 = rs.getString("DAY2");
@@ -123,10 +101,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
                                
                        setValue(movie2.toUpperCase(),timezoneNumber ,dayCell); 
                             
-                           }
-                       
-                       
-                        
+                           } 
                       statement.close();
                       dbConnection.close();
                          
@@ -134,13 +109,7 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
          {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
             ex=ex.getNextException();         
-         }
-         
-    
-                                           
-        
-    
-    
+         }      
     
     }
     
@@ -203,11 +172,12 @@ public class WeeklyProgramPage extends javax.swing.JFrame {
                 {"11:00", null, null, null, null, null, null, null}
             },
             new String [] {
-                "", "Monday", "Tuesday", "Wednesday", "Thirsday", "Friday", "Saturday", "Sunday"
+                "", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
             }
         ));
         weekTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         weekTable.setAutoscrolls(false);
+        weekTable.setEnabled(false);
         weekTable.setFocusCycleRoot(true);
         weekTable.setGridColor(new java.awt.Color(51, 0, 51));
         weekTable.setRequestFocusEnabled(false);

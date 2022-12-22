@@ -283,25 +283,19 @@ public class makeChangesCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_BackToMenuActionPerformed
 
     private void saveChangesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesActionPerformed
-           
-        
-        
-        int a = JOptionPane.showConfirmDialog(jPanel1,"Do you want to continue?" );
-                    
-                if(a==JOptionPane.YES_OPTION){
-        
+    int a = JOptionPane.showConfirmDialog(jPanel1,"Do you want to continue?" );            
+    if(a==JOptionPane.YES_OPTION)
+       {  
+             
            newFirstname2=jTextField1.getText();
            newLastname2 = jTextField2.getText();
            newEmail2= jTextField3.getText();
            newPhone2= jTextField4.getText();
            newCompany2= jTextField5.getText();
-        
-        
-        
          try{
              Class.forName(driverClassName);
                 
-         } catch(ClassNotFoundException ex) {}
+             } catch(ClassNotFoundException ex) {}
          
          try{
                  
@@ -311,27 +305,19 @@ public class makeChangesCustomer extends javax.swing.JFrame {
            
               editValues.setInt(1, newid1);
               editValues.setString(2,"Customer");
-               editValues.setString(3, newFirstname2);
-                editValues.setString(4, newLastname2);
-                 editValues.setString(5, newEmail2);
-                  editValues.setString(6, newPhone2);
-                   editValues.setString(7, newCompany2);
-                   
-            
-              editValues.executeUpdate();
-                   
-           
-             
+              editValues.setString(3, newFirstname2);
+              editValues.setString(4, newLastname2);
+              editValues.setString(5, newEmail2);
+              editValues.setString(6, newPhone2);
+              editValues.setString(7, newCompany2);
+              editValues.executeUpdate();    
         }
          catch(SQLException ex) 
            {
             System.out.print("\n -- SQL Exception -- \n" + ex.getMessage());
-            ex=ex.getNextException();  
-            
+            ex=ex.getNextException();             
             appear=false;
            } 
-         
-       
            if(appear==false){
              JOptionPane.showMessageDialog(jPanel1, "Something go wrong , try again please."); 
          }else{
